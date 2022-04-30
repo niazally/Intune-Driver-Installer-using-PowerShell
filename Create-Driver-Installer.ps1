@@ -17,7 +17,7 @@
 #                    script. Valid optons are: Yes, No (Default).
 #                    If driver version is ignored (Yes), the driver installation will 
 #                    not occur if a matching driver is already installed, regardless of 
-#                    the installed version. Ensure the packaged driver gets installed,
+#                    the installed version. To ensure the packaged driver gets installed,
 #                    set IgnoreVersion to No.
 # 
 #   IntuneWinFile -- Specifies the location of the IntuneWinAppUtil.exe application.
