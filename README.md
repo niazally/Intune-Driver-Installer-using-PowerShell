@@ -25,6 +25,9 @@ Intune Driver Installer using PowerShell release contains the following componen
 
 ## Usage
 Create-Driver-Installer.ps1 is used to create the Intune Driver Installer.
+> Ensure ExecutionPolicy is set to allow the PowerShell script to run; otherwise, Create-Driver-Installer.ps1 will fail to run.
+> 
+> Use `powershell.exe -ExecutionPolicy Bypass -File .\Create-Driver-Installer.ps1` to allow execution, if needed.
 
 ### Parameters
 
@@ -40,9 +43,9 @@ regardless of the installed version. To ensure the packaged driver gets installe
 > Default IntuneWinFile location is lib\IntuneWinAppUtil.exe
 
 ### Examples
-- Create-Driver-Installer.ps1 -$Inf "driver.inf"
-- Create-Driver-Installer.ps1 -$Inf "driver.inf" -OutputPath "output"
-- Create-Driver-Installer.ps1 -$Inf "driver.inf" -OutputPath "output" -IgnoreVersion Yes
+- `Create-Driver-Installer.ps1 -$Inf "driver.inf"`
+- `Create-Driver-Installer.ps1 -$Inf "driver.inf" -OutputPath "output"`
+- `Create-Driver-Installer.ps1 -$Inf "driver.inf" -OutputPath "output" -IgnoreVersion Yes`
 
 ### Output
 Create-Driver-Installer.ps1 will create the following files in the specified output folder:
