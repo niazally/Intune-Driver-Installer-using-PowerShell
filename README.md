@@ -43,9 +43,9 @@ regardless of the installed version. To ensure the packaged driver gets installe
 > Default IntuneWinFile location is lib\IntuneWinAppUtil.exe
 
 ### Examples
-- `Create-Driver-Installer.ps1 -$Inf "driver.inf"`
-- `Create-Driver-Installer.ps1 -$Inf "driver.inf" -OutputPath "output"`
-- `Create-Driver-Installer.ps1 -$Inf "driver.inf" -OutputPath "output" -IgnoreVersion Yes`
+- `Create-Driver-Installer.ps1 -$Inf "[driver folder]\driver.inf"`
+- `Create-Driver-Installer.ps1 -$Inf "[driver folder]\driver.inf" -OutputPath "output"`
+- `Create-Driver-Installer.ps1 -$Inf "[driver folder]\driver.inf" -OutputPath "output" -IgnoreVersion Yes`
 
 ### Output
 Create-Driver-Installer.ps1 will create the following files in the specified output folder:
