@@ -1,21 +1,25 @@
-# ========================================================================================================
+# =================================================================================================================
 # Driver Detection PowerShell Script
 # Version 1.0
 #
 # Description: Check if driver is installed with PNPUTIL command using 
 #              specified driver INF file name
 # Parameters:
-#   Inf -- Specifies INF file name of the driver
+#   GUID -- Specifies GUID of the driver
 #   CheckVersion -- Specifies whether to check and verify driver version. Options: Yes, No
 #   DriverVersion -- Version to check and verify
 #
 # Example: Driver-Detection.ps1 -Inf driver.inf -CheckVersion Yes -DriverVersion 12/14/2021 12.18.13.0
+#                               -CheckGUID Yes -DriverGUID "{4d36e972-e325-11ce-bfc1-08002be10318}"
 #
 # Created and maintained by Niaz Ally (niazally@gmail.com)
-# ========================================================================================================
+# =================================================================================================================
 
-# Define parameters.
-param ($Inf = "{{--InfFileName--}}", $CheckVersion = "{{--CheckVersion--}}", $DriverVersion = "{{--DriverVersion--}}")
+# Define parameters
+param (
+    $Inf = "{{--InfFileName--}}", $CheckVersion = "{{--CheckVersion--}}", $DriverVersion = "{{--DriverVersion--}}", 
+    $CheckGUID = "{{--CheckGUID--}}", $DriverGUID = "{{--DriverGUID--}}"
+    )
 
 # Check for INF file name parameter. If not provided, prompt for INF file.
 if ($null -eq $Inf -Or $Inf -eq "" -Or $Inf -eq "{{--inffilename--}}") {
@@ -69,6 +73,9 @@ if ($null -eq $detectionResult) {
 # If $detectionResult is not null, then driver INF File name was found in $driverList
 # Therefore, driver is installed.
 else {
+    # Check if driver version or GUID needs to be verified
+    $verified = $true
+
     # Check if driver version needs to be verified
     if ($CheckVersion -eq "Yes") {
         # Check $detectionResult for driver version
@@ -76,19 +83,33 @@ else {
 
         # Check if $DriverVersion was found in $versionResult
         # If $versionResult is null, then it means the installed driver version is different.
-        # Therefore, driver and version does not match. Display message and exit with status 1
+        # Therefore, driver and version does not match. Set $verified to $false
         if ($null -eq $versionResult) {
-            Write-Output "$Inf driver was found, but version is incorrect.`n"
-            exit 1
-        }
-        # If $versionResult is not null, then the driver and version is correct.
-        # Display message and exit with status 0
-        else {
-            Write-Output "$Inf was found, and version is correct.`n"
-             exit 0
+            $verified = $false
         }
     }
-    # If driver version does not need to be verified, then display message and exit with status 0
+
+    # Check if driver GUID needs to be verified
+    if ($CheckGUID -eq "Yes") {
+        # Check $detectionResult for driver GUID
+        $guidResult = $detectionResult.toString() | Select-String -Pattern $DriverGUID
+
+        # Check if $DriverGUID was found in $guidResult
+        # If $guidResult is null, then it means the installed driver GUID is different.
+        # Therefore, driver and GUID does not match. Set $verified to $false
+        if ($null -eq $guidResult) {
+            $verified = $false
+        }
+    }
+
+    # Check if version and GUID needs to be verified and check if verification was succesful
+    # If version and GUID needs to be verified and verification is unsuccessful,
+    # display error message and exit with status 1
+    if (($CheckVersion -eq "Yes" -Or $CheckGUID -eq "Yes") -And -Not $verified) {
+        Write-Output "$Inf driver was found, but version or GUID is incorrect.`n"
+        exit 1
+    }
+    # If driver version or GUID does not need to be verified, then display message and exit with status 0
     else {
         Write-Output "$Inf was found.`n"
         exit 0

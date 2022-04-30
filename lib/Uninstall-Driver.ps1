@@ -15,7 +15,7 @@
 $Inf = "{{--InfFileName--}}"
 
 # Check if $Inf has been updated. Only continue if placeholder has been updated.
-if ($Inf -ne "{{--InfFileName--}}") {
+if ($Inf -ne "{{--inffilename--}}") {
     # Begin driver uninstall
 
     # Call Driver-Installer.ps1 and pass configuration to uninstall driver

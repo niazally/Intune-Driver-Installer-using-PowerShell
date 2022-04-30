@@ -99,7 +99,7 @@ if(Test-Path -Path $Inf) {
 
         # Display message to indicate start of driver uninstall
         Write-Output "Driver uninstall started`nUninstalling driver using $Inf...`n"
-
+        
         # Run PNPUTIL command to uninstall driver and store output to $uninstallCommand for analysis
         $uninstallCommand = Invoke-Expression -Command "$pnpUtilPath /delete-driver '$Inf' /uninstall"
 

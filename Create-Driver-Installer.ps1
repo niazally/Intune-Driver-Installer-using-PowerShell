@@ -24,9 +24,9 @@
 #                    This application is required to compile the .intunewin file.
 #                    Default location is [Current Directory]\lib\IntuneWinAppUtil.exe
 #
-# Example: Create-Driver-Installer.ps1 -$Inf "driver.inf"
-# Example: Create-Driver-Installer.ps1 -$Inf "driver.inf" -OutputPath "output"
-# Example: Create-Driver-Installer.ps1 -$Inf "driver.inf" -OutputPath "output" -IgnoreVersion Yes
+# Example: Create-Driver-Installer.ps1 -$Inf "[driver folder]\driver.inf"
+# Example: Create-Driver-Installer.ps1 -$Inf "[driver folder]\driver.inf" -OutputPath "output"
+# Example: Create-Driver-Installer.ps1 -$Inf "[driver folder]\driver.inf" -OutputPath "output" -IgnoreVersion Yes
 #
 # Created and maintained by Niaz Ally (niazally@gmail.com)
 # =====================================================================================================
@@ -146,9 +146,43 @@ $infPath = Split-Path -Path $Inf # Directory containing the driver files
 $infFile = Split-Path -Path $Inf -Leaf # Driver INF file name
 $infFileBase = $infFile.Substring(0, $infFile.LastIndexOf(".")) # Driver INF file name without extension
 
-$driverVersion = $null # Store driver from INF file
+$driverGUID = $null # Store driver GUID from INF file
 
-# Retrive Driver Version from INF File
+# Retrieve Driver GUID from INF File
+
+Write-Output "> Getting driver GUID from INF file"
+
+# Open INF file and retreive line containing ClassGUID
+$infGUID = (Get-Content -Path $Inf | Select-String -Pattern "ClassGUID").Line
+
+# Retrieve the value of ClassGUID
+$infGUID = $infGUID.Split("=")[-1].Split(" ")[-1].Split(";")
+
+# Check if the driver GUID is at the end of the value
+# If not then driver GUID should be the element before the last vaule
+if ($infGUID[-1] -eq "") {
+    $infGUID = $infGUID[-2]
+}
+else {
+    $infGUID = $infGUID[-1]
+}
+
+# Check if GUID retrieved is a valid GUID
+# If GUID is invalid, display error and exit with status 1
+if (-Not ($infGUID -Match "(?im)^[{(]?[0-9A-F]{8}[-]?(?:[0-9A-F]{4}[-]?){3}[0-9A-F]{12}[)}]?$")) {
+    Write-Output "Error: Unable to retrieve a valid GUID from INF file"
+    Write-Output "GUID received is $infGUID`n"
+    CleanUp($tempDir)
+    exit 1
+}
+else {
+    # Store driver GUID from INF file in $driverGUID
+    $driverGUID = $infGUID
+}
+
+$driverVersion = $null # Store driver version from INF file
+
+# Retrieve Driver Version from INF File
 
 Write-Output "> Getting driver version from INF file"
 
@@ -321,6 +355,8 @@ try {
 
     # Update relevant placeholders
     $detectDriverScript = $detectDriverScript.Replace("{{--InfFileName--}}", $infFile)
+    $detectDriverScript = $detectDriverScript.Replace("{{--CheckGUID--}}", "Yes")
+    $detectDriverScript = $detectDriverScript.Replace("{{--DriverGUID--}}", $driverGUID)
 
     # If $IgnoreVersion is set to No, update relevant placeholders to check driver version
     if($IgnoreVersion -eq "No") {
