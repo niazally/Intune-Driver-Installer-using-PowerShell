@@ -8,6 +8,9 @@ The script will package the driver files along with supporting PowerShell script
 IntuneWin packaging is done by Microsoft Win32 Content Prep Tool (IntuneWinAppUtil.exe):
 https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool
 
+> Microsoft Win32 Content Prep Tool requires .NET Framework 4.7.2.
+> Read license terms for the tool here: [Microsoft License Terms For Win32 Content Prep Tool](https://github.com/Microsoft/Microsoft-Win32-Content-Prep-Tool/blob/master/Microsoft%20License%20Terms%20For%20Win32%20Content%20Prep%20Tool.pdf)
+
 Intune Driver Installer using PowerShell releases already include the IntuneWinAppUtil.exe; however, other versions can be used through the -IntuneWinFile parameter.
 
 ## Prerequisites
