@@ -1,7 +1,7 @@
 # Intune Driver Installer using PowerShell
 Install drivers through Microsoft Intune using PowerShell.
 
-This PowerShell script compiles and creates .intunewin and detection script files that is used to create a Windows app (Win32) App in Intune.
+This PowerShell script compiles and creates .intunewin and detection script files that are used to create a Windows app (Win32) App in Intune.
 
 The script will package the driver files along with supporting PowerShell scripts too install/uninstall a driver from Windows.
 
