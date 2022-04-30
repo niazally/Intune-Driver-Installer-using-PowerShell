@@ -144,7 +144,7 @@ catch {
 # Setup variables to begin preparation for .intunewin creation
 $infPath = Split-Path -Path $Inf # Directory containing the driver files
 $infFile = Split-Path -Path $Inf -Leaf # Driver INF file name
-$infFileBase = Split-Path -Path $Inf -LeafBase # Driver INF file name without extension
+$infFileBase = $infFile.Substring(0, $infFile.LastIndexOf(".")) # Driver INF file name without extension
 
 $driverVersion = $null # Store driver from INF file
 
