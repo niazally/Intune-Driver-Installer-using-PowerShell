@@ -1,6 +1,6 @@
 # =================================================================================================================
 # Driver Detection PowerShell Script
-# Version 1.0
+# Version 1.0.0.1
 #
 # Description: Check if driver is installed with PNPUTIL command using 
 #              specified driver INF file name
@@ -79,7 +79,7 @@ else {
     # Check if driver version needs to be verified
     if ($CheckVersion -eq "Yes") {
         # Check $detectionResult for driver version
-        $versionResult = $detectionResult.toString() | Select-String -Pattern $DriverVersion
+        $versionResult =  Out-String -InputObject $detectionResult | Select-String -Pattern $DriverVersion
 
         # Check if $DriverVersion was found in $versionResult
         # If $versionResult is null, then it means the installed driver version is different.
@@ -92,7 +92,7 @@ else {
     # Check if driver GUID needs to be verified
     if ($CheckGUID -eq "Yes") {
         # Check $detectionResult for driver GUID
-        $guidResult = $detectionResult.toString() | Select-String -Pattern $DriverGUID
+        $guidResult =  Out-String -InputObject $detectionResult | Select-String -Pattern $DriverGUID
 
         # Check if $DriverGUID was found in $guidResult
         # If $guidResult is null, then it means the installed driver GUID is different.
